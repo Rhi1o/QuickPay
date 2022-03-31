@@ -11,7 +11,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // creating a constant variables for the database.
     // below variable is for database name.
-    private static final String DB_NAME = "dbquickpay";
+    private static final String DB_NAME = "quickpaydb";
 
     // below int is the database version
     private static final int DB_VERSION = 1;
@@ -24,7 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String USERS_PASSWORD_COL = "description";
 
     // below variables are for the transactions table
-    private static final String TRANSACTIONS_TABLE_NAME = "users";
+    private static final String TRANSACTIONS_TABLE_NAME = "transactions";
     private static final String TRANSACTIONS_ID_COL = "id";
     private static final String TRANSACTIONS_TYPE_COL = "type";
     private static final String TRANSACTIONS_AMOUNT_COL = "amount";
@@ -32,14 +32,10 @@ public class DBHandler extends SQLiteOpenHelper {
     // Can use the SQLite query "SELECT DATETIME('now')" to get this format in UTC time.
     private static final String TRANSACTIONS_DATE_COL = "date";
 
-    public DBHandler(@Nullable Context context) {
+    // creating a constructor for our database handler.
+    public DBHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
-
-    // creating a constructor for our database handler.
-    //public DBHandler(Context context) {
-    //    super(context, DB_NAME, null, DB_VERSION);
-    //}
 
 
     // Called the first time a database is accessed. There should be code here to create a new
@@ -70,21 +66,12 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new user to our sqlite database.
-    // Returns true if successful insertionm, false otherwise.
+    // Returns true if successful insertion, false otherwise.
     public boolean addNewUser(String userName, String userUsername, String userPassword) {
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
         // as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
-
-        String query = "CREATE TABLE " + USERS_TABLE_NAME + " ("
-                + USERS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + USERS_NAME_COL + " TEXT,"
-                + USERS_USERNAME_COL + " TEXT,"
-                + USERS_PASSWORD_COL + " TEXT)";
-
-        // execute above sql query
-        db.execSQL(query);
 
         // on below line we are creating a
         // variable for content values.
@@ -110,7 +97,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new transaction to our sqlite database.
-    // Returns true if successful insertionm, false otherwise.
+    // Returns true if successful insertion, false otherwise.
     public boolean addNewTransaction(String transactionType, String transactionAmount, String transactionDate) {
 
         // on below line we are creating a variable for
