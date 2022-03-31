@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.Nullable;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     // creating a constant variables for the database.
     // below variable is for database name.
-    private static final String DB_NAME = "quickpaydb";
+    private static final String DB_NAME = "dbquickpay";
 
     // below int is the database version
     private static final int DB_VERSION = 1;
@@ -27,15 +29,21 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TRANSACTIONS_TYPE_COL = "type";
     private static final String TRANSACTIONS_AMOUNT_COL = "amount";
     // Dates must be stored as YYYY-MM-DD HH:MM:SS.SSS
-    // Can use the SQLite querry "SELECT DATETIME('now') to get this format in UTC time.
+    // Can use the SQLite query "SELECT DATETIME('now')" to get this format in UTC time.
     private static final String TRANSACTIONS_DATE_COL = "date";
 
-    // creating a constructor for our database handler.
-    public DBHandler(Context context) {
+    public DBHandler(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    // below method is for creating a database by running a sqlite query
+    // creating a constructor for our database handler.
+    //public DBHandler(Context context) {
+    //    super(context, DB_NAME, null, DB_VERSION);
+    //}
+
+
+    // Called the first time a database is accessed. There should be code here to create a new
+    // database.
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Creating an sqlite query and setting our column names
@@ -62,34 +70,48 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new user to our sqlite database.
-    public void addNewUser(String userName, String userUsername, String userPassword) {
-
+    // Returns true if successful insertionm, false otherwise.
+    public boolean addNewUser(String userName, String userUsername, String userPassword) {
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
         // as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
 
+        String query = "CREATE TABLE " + USERS_TABLE_NAME + " ("
+                + USERS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + USERS_NAME_COL + " TEXT,"
+                + USERS_USERNAME_COL + " TEXT,"
+                + USERS_PASSWORD_COL + " TEXT)";
+
+        // execute above sql query
+        db.execSQL(query);
+
         // on below line we are creating a
         // variable for content values.
-        ContentValues values = new ContentValues();
+        ContentValues cv = new ContentValues();
 
         // on below line we are passing all values
         // along with its key and value pair.
-        values.put(USERS_NAME_COL, userName);
-        values.put(USERS_USERNAME_COL, userUsername);
-        values.put(USERS_PASSWORD_COL, userPassword);
+        cv.put(USERS_NAME_COL, userName);
+        cv.put(USERS_USERNAME_COL, userUsername);
+        cv.put(USERS_PASSWORD_COL, userPassword);
 
         // after adding all values we are passing
         // content values to our table.
-        db.insert(USERS_TABLE_NAME, null, values);
+        long insert = db.insert(USERS_TABLE_NAME, null, cv);
 
-        // at last we are closing our
-        // database after adding database.
         db.close();
+
+        if (insert == -1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     // this method is use to add new transaction to our sqlite database.
-    public void addNewTransaction(String transactionType, String transactionAmount, String transactionDate) {
+    // Returns true if successful insertionm, false otherwise.
+    public boolean addNewTransaction(String transactionType, String transactionAmount, String transactionDate) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -98,21 +120,26 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // on below line we are creating a
         // variable for content values.
-        ContentValues values = new ContentValues();
+        ContentValues cv = new ContentValues();
 
         // on below line we are passing all values
         // along with its key and value pair.
-        values.put(TRANSACTIONS_TYPE_COL, transactionType);
-        values.put(TRANSACTIONS_AMOUNT_COL, transactionAmount);
-        values.put(TRANSACTIONS_DATE_COL, transactionDate);
+        cv.put(TRANSACTIONS_TYPE_COL, transactionType);
+        cv.put(TRANSACTIONS_AMOUNT_COL, transactionAmount);
+        cv.put(TRANSACTIONS_DATE_COL, transactionDate);
 
         // after adding all values we are passing
         // content values to our table.
-        db.insert(TRANSACTIONS_TABLE_NAME, null, values);
+        long insert = db.insert(TRANSACTIONS_TABLE_NAME, null, cv);
 
-        // at last we are closing our
-        // database after adding database.
         db.close();
+
+        if (insert == -1) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
     @Override

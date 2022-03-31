@@ -1,6 +1,9 @@
 package com.example.quickpay;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,17 +19,18 @@ import com.example.quickpay.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_notifications);
+        setContentView(R.layout.activity_main);
 
-        DBHandler dbHandler = new DBHandler(MainActivity.this);
+        dbHandler = new DBHandler(MainActivity.this);
 
-        //dbHandler.addNewUser("Floyd Cain", "FC", "Hello");
-
-        Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_SHORT).show();
+        if (dbHandler.addNewUser("Floyd Cain", "FC", "Hello")) {
+            Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
