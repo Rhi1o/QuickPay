@@ -27,33 +27,41 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         dbHandler = new DBHandler(MainActivity.this);
-/*
-        if (dbHandler.addNewUser("Floyd", "Cain", "FC", "Hello",
-                1000000.00, 123456, 987654321)) {
-            Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_SHORT).show();
-        }
 
+        /*
+        // TESTING DATABASE
+        int counter = 0;
 
+        if (!dbHandler.addNewUser("a", "b", "f", "d", 1, 2, 3)) {counter++;}
+        if (!dbHandler.addNewUser("a", "b", "c", "d", 1, 2, 3)) {counter++;}
+        if (!dbHandler.addNewUser("a", "b", "c", "d", 1, 2, 3)) {counter++;}
+        if (!dbHandler.addNewUser("a", "b", "c", "d", 1, 2, 3)) {counter++;}
 
-        dbHandler.editUser(1, "Floyd", "Cain", "FC", "Hello",
-                1000000.00, 654321, 987654321);
-        dbHandler.editUser(2, "John", "Roll", "JR5862", "NO",
-                00.00, 879456, 111222333);
-        dbHandler.editUser(3, "Floyd", "Yooo", "FC", "Hello",
-                1000000.00, 654321, 987654321);
+        if (!dbHandler.editUser(1,"a", "b", "c", "d", 1, 2, 3)) {counter++;}
+        if (!dbHandler.editUser(2,"b", "c", "d", "e", 2, 3, 4)) {counter++;}
+        if (!dbHandler.editUser(3,"c", "d", "e", "f", 3, 4, 5)) {counter++;}
+        if (!dbHandler.editUser(4,"d", "e", "f", "g", 4, 5, 6)) {counter++;}
+        if (!dbHandler.editUser(5,"d", "e", "f", "g", 4, 5, 6)) {counter++;}//
+        if (!dbHandler.editUser(0,"d", "e", "f", "g", 4, 5, 6)) {counter++;}//
 
-        if (!dbHandler.editUser(7, "Floyd", "Yooo", "FC", "Hello",
-                1000000.00, 654321, 987654321)) {
-            Toast.makeText(MainActivity.this, "Failed to update", Toast.LENGTH_SHORT).show();
-        }
+        if (!dbHandler.addNewTransaction(1,"Withdrawal","a",1,"01/01/2000 01:01:00.001")) {counter++;}
+        if (!dbHandler.addNewTransaction(1,"Deposit","b",1,"01/01/2000 01:01:00.002")) {counter++;}
+        if (!dbHandler.addNewTransaction(1,"Withdrawal","c",1,"01/01/2000 01:01:00.003")) {counter++;}
 
-        if (dbHandler.addNewTransaction("Withdrawal", "WALL-MART",
-                14.45, "2022/04/01 17:16:13.0000")) {
-            Toast.makeText(MainActivity.this, "Transaction added", Toast.LENGTH_SHORT).show();
-        }
+        if (!dbHandler.addNewDraft(1,"Withdrawal","Monthly","b",15.00)) {counter++;}
+        if (!dbHandler.addNewDraft(1,"Withdrawal","Monthly","b",15.00)) {counter++;}
+        if (!dbHandler.addNewDraft(1,"Deposit","Monthly","b",15.00)) {counter++;}
 
- */
+        if (!dbHandler.editDraft(1,"withdrawal","Bi-weekly",15.00,"b")) {counter++;}
+        if (!dbHandler.editDraft(2,"dep","monthly",16.00,"c")) {counter++;}
+        if (!dbHandler.editDraft(3,"deposit","semianually",17.00,"d")) {counter++;}
+        if (!dbHandler.editDraft(4,"a","Bi-weekly",15.00,"b")) {counter++;}//
 
+        if (!dbHandler.addNewDraft(1,"Withdrawal","Monthly","b",15.00)) {counter++;}
+        if (!dbHandler.deleteDraft(4)) {counter++;}
+        if (!dbHandler.deleteDraft(4)) {counter++;}//
 
+        Toast.makeText(MainActivity.this, "Failed: " + counter + "/4", Toast.LENGTH_SHORT).show();
+        */
     }// End onCreate
 }// End main

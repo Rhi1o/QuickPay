@@ -30,6 +30,7 @@ public class DBHandler extends SQLiteOpenHelper {
     // below variables are for the transactions table
     private static final String TRANSACTIONS_TABLE_NAME = "transactions";
     private static final String TRANSACTIONS_ID_COL = "id";
+    private static final String TRANSACTIONS_USER_COL = "userid";
     private static final String TRANSACTIONS_TYPE_COL = "type";
     private static final String TRANSACTIONS_OTHER_PARTY_COL = "party";
     private static final String TRANSACTIONS_AMOUNT_COL = "amount";
@@ -40,6 +41,7 @@ public class DBHandler extends SQLiteOpenHelper {
     // below variables are for the drafts table
     private static final String DRAFTS_TABLE_NAME = "drafts";
     private static final String DRAFTS_ID_COL = "id";
+    private static final String DRAFTS_USER_COL = "userid";
     private static final String DRAFTS_TYPE_COL = "type";
     private static final String DRAFTS_FREQUENCY_COL = "frequency";
     private static final String DRAFTS_AMOUNT_COL = "amount";
@@ -74,6 +76,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // along with their data types for the transactions table.
         query = "CREATE TABLE " + TRANSACTIONS_TABLE_NAME + " ("
                 + TRANSACTIONS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TRANSACTIONS_USER_COL + " INT,"
                 + TRANSACTIONS_TYPE_COL + " TEXT,"
                 + TRANSACTIONS_OTHER_PARTY_COL + " TEXT,"
                 + TRANSACTIONS_AMOUNT_COL + " DECIMAL,"
@@ -86,6 +89,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // along with their data types for the drafts table.
         query = "CREATE TABLE " + DRAFTS_TABLE_NAME + " ("
                 + DRAFTS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DRAFTS_USER_COL + " INT,"
                 + DRAFTS_TYPE_COL + " TEXT,"
                 + DRAFTS_FREQUENCY_COL + " TEXT,"
                 + DRAFTS_OTHER_PARTY_COL + " TEXT,"
@@ -133,7 +137,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new transaction to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public boolean addNewDraft(String type, String frequency, String otherParty, double amount) {
+    public boolean addNewDraft(int userID, String type, String frequency, String otherParty,
+                               double amount) {
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
         // as we are writing data in our database.
@@ -145,6 +150,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // on below line we are passing all values
         // along with its key and value pair.
+        cv.put(TRANSACTIONS_USER_COL, userID);
         cv.put(DRAFTS_TYPE_COL, type);
         cv.put(DRAFTS_OTHER_PARTY_COL, otherParty);
         cv.put(DRAFTS_AMOUNT_COL, amount);
@@ -165,7 +171,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new transaction to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public boolean addNewTransaction(String transactionType, String otherParty, double transactionAmount, String transactionDate) {
+    public boolean addNewTransaction(int userID, String transactionType, String otherParty,
+                                     double transactionAmount, String transactionDate) {
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
         // as we are writing data in our database.
@@ -177,6 +184,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // on below line we are passing all values
         // along with its key and value pair.
+        cv.put(TRANSACTIONS_USER_COL, userID);
         cv.put(TRANSACTIONS_TYPE_COL, transactionType);
         cv.put(TRANSACTIONS_OTHER_PARTY_COL, otherParty);
         cv.put(TRANSACTIONS_AMOUNT_COL, transactionAmount);
@@ -195,7 +203,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End addNewTransaction
 
-    public boolean editUser(int id, String userFName, String userLName, String userUsername,
+    public boolean editUser(int userID, String userFName, String userLName, String userUsername,
                             String userPassword, double balance, int account, int routing) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -209,38 +217,61 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(USERS_ACCOUNT_COL, account);
         cv.put(USERS_ROUTING_COL, routing);
 
-        int update = db.update(USERS_TABLE_NAME, cv, "id = " + id, null);
+        int update = db.update(USERS_TABLE_NAME, cv,  USERS_ID_COL + " = " + userID,
+                null);
 
-        if (update == 0) {
+        if (update < 1) {
             return false;
         } else {
             return true;
         }
     }// End editUser
 
-    public boolean editDraft(int id, String type, String frequency, double amount, String party) {
+    // Returns a string list of all transactions linked to the passed user.
+    public String[] getTransactions(int userID) {
+        String[] transactions = new String[0];
+
+        return transactions;
+    }// End getTransactions
+
+    // Returns a string list of all drafts linked to the passed user.
+    public String[] getDrafts(int userID) {
+        String[] drafts = new String[0];
+
+        return drafts;
+    }// End getDrafts
+
+    // Edits the draft based on the draft ID, must pass all values for draft, will edit all values.
+    public boolean editDraft(int draftID, String type, String frequency, double amount,
+                             String otherParty) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 
-        int update = 1;
+        cv.put(DRAFTS_TYPE_COL, type);
+        cv.put(DRAFTS_OTHER_PARTY_COL, otherParty);
+        cv.put(DRAFTS_AMOUNT_COL, amount);
+        cv.put(DRAFTS_FREQUENCY_COL, frequency);
 
-        if (update == 0) {
+        int update = db.update(DRAFTS_TABLE_NAME, cv, DRAFTS_ID_COL + " = " + draftID,
+                null);
+
+        if (update < 1) {
             return false;
         } else {
             return true;
         }
     }// End editDraft
 
-    public boolean deleteDraft(int id, String transactionType, String otherParty,
-                               double transactionAmount, String transactionDate) {
+    public boolean deleteDraft(int draftID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 
-        int delete = 1;
+        int delete = db.delete(DRAFTS_TABLE_NAME, DRAFTS_ID_COL + " = " + draftID,
+                null);
 
-        if (delete == 0) {
+        if (delete < 1) {
             return false;
         } else {
             return true;
@@ -252,6 +283,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // this method is called to check if the table exists already.
         db.execSQL("DROP TABLE IF EXISTS " + USERS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TRANSACTIONS_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DRAFTS_TABLE_NAME);
         onCreate(db);
     }// End onUpgrade
 }
