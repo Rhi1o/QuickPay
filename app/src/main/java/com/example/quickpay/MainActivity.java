@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         dbHandler = new DBHandler(MainActivity.this);
 
+        //getActionBar().setHomeButtonEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+
         /*
         // TESTING DATABASE
         int counter = 0;
