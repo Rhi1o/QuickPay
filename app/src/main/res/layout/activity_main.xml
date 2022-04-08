@@ -8,7 +8,7 @@
     android:paddingTop="?attr/actionBarSize">
 
     <Button
-        android:id="@+id/btnCalcPer"
+        android:id="@+id/btnCalcDecimal"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="83dp"
@@ -116,7 +116,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnCalcDel"
+        android:id="@+id/btnCalcDelete"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="233dp"
