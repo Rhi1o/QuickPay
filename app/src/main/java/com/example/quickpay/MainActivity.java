@@ -176,24 +176,29 @@ public class MainActivity extends AppCompatActivity {
     private void editTransactionText(String add) {
         StringBuilder temp = new StringBuilder(txtTransactionAmt.getText().toString());
 
-        if (temp.toString().equals("$0.00")) {
-            temp = temp.replace(0, temp.length(), "$");
+        if (temp.toString().equals("$ 0.00")) {
+            temp = temp.replace(0, temp.length(), "$ ");
         }
 
         if (add == "d") {
             temp = temp.deleteCharAt(temp.length() - 1);
-            if (temp.length() <= 1) {
+            if (temp.length() <= 2) {
                 resetTransactionText();
+                return;
             }
-        } else {
+        }
+        else if (temp.indexOf(".") != -1 && temp.length() - temp.indexOf(".") == 3) {
+            // Do nothing
+        }
+        else {
             temp = temp.append(add);
         }
 
-        txtTransactionAmt.setText(temp);
+        txtTransactionAmt.setText(temp.toString());
     }// End editText
 
     private void resetTransactionText() {
-        String temp = "$0.00";
+        String temp = "$ 0.00";
 
         txtTransactionAmt.setText(temp);
     }// End editText
