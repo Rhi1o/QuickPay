@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DBHandler dbHandler;
     private Button btnMenu;
+    private Button btnReceive;
+    private Button btnSend;
     private TextView txtTransactionAmt;
     private Button btnCalcDelete;
     private Button btnCalcDecimal;
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnMenu = findViewById(R.id.btnMenu);
+        btnReceive = findViewById(R.id.btnRecieve);
+        btnSend = findViewById(R.id.btnSend);
+
         txtTransactionAmt = findViewById(R.id.txtTransactionAmt);
         btnCalcDelete = findViewById(R.id.btnCalcDelete);
         btnCalcDecimal = findViewById(R.id.btnCalcDecimal);
@@ -60,6 +66,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showMenuPopup(v);
+            }
+        });
+
+        btnReceive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReceivePopup(v);
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSendPopup(v);
             }
         });
 
@@ -227,18 +247,73 @@ public class MainActivity extends AppCompatActivity {
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        final PopupWindow menuPopup = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        menuPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-        // dismiss the popup window when touched
-        popupView.setOnTouchListener(new View.OnTouchListener() {
+        ImageButton btnCloseMenu = (ImageButton) popupView.findViewById(R.id.btnCloseMenu);
+
+        // dismiss the popup window when the close button is pressed
+        btnCloseMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                popupWindow.dismiss();
-                return true;
+            public void onClick(View v) {
+                menuPopup.dismiss();
+            }
+        });
+    }
+
+    public void showReceivePopup(View view) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_receive, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow receivePopup = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        receivePopup.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        ImageButton btnCloseReceiving = (ImageButton) popupView.findViewById(R.id.btnCloseReceiving);
+
+        // dismiss the popup window when the close button is pressed
+        btnCloseReceiving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                receivePopup.dismiss();
+            }
+        });
+    }
+
+    public void showSendPopup(View view) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_send, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow sendPopup = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        sendPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        ImageButton btnCloseSending = (ImageButton) popupView.findViewById(R.id.btnCloseSending);
+
+        // dismiss the popup window when the close button is pressed
+        btnCloseSending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPopup.dismiss();
             }
         });
     }
