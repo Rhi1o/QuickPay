@@ -6,6 +6,7 @@
     android:background="#E1E1E1">
 
     <TextView
+        android:id="@+id/txtSendTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -13,6 +14,17 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="0dp"
         android:text="Send"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/txtSendAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtSendTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="0dp"
+        android:text="Amount: $ 0.00"
         android:textSize="24sp" />
 
     <ImageButton
@@ -25,5 +37,30 @@
         android:layout_marginEnd="5dp"
         android:background="#00FFFFFF"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSendAmount"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp">
+
+        <RadioButton
+            android:id="@+id/rdoSendToBank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:checked="true"
+            android:text="Bank Account" />
+
+        <RadioButton
+            android:id="@+id/rdoSendToUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="Other user:" />
+    </RadioGroup>
+
+
 
 </RelativeLayout>
