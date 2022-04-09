@@ -8,11 +8,12 @@
 
     <Button
         android:id="@+id/btnCalcDecimal"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="83dp"
         android:layout_marginEnd="233dp"
         android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_button"
         android:text="."
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,11 +21,12 @@
 
     <Button
         android:id="@+id/btnCalc0"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="158dp"
         android:layout_marginEnd="158dp"
         android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_button"
         android:text="0"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,11 +34,12 @@
 
     <Button
         android:id="@+id/btnCalc7"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="83dp"
         android:layout_marginEnd="233dp"
         android:layout_marginBottom="125dp"
+        android:background="@drawable/rounded_button"
         android:text="7"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,11 +47,12 @@
 
     <Button
         android:id="@+id/btnCalc9"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="233dp"
         android:layout_marginEnd="83dp"
         android:layout_marginBottom="125dp"
+        android:background="@drawable/rounded_button"
         android:text="9"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,11 +60,12 @@
 
     <Button
         android:id="@+id/btnCalc1"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="83dp"
         android:layout_marginEnd="233dp"
         android:layout_marginBottom="275dp"
+        android:background="@drawable/rounded_button"
         android:text="1"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,11 +73,12 @@
 
     <Button
         android:id="@+id/btnCalc3"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="233dp"
         android:layout_marginEnd="83dp"
         android:layout_marginBottom="275dp"
+        android:background="@drawable/rounded_button"
         android:text="3"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,11 +86,12 @@
 
     <Button
         android:id="@+id/btnCalc4"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="83dp"
         android:layout_marginEnd="233dp"
         android:layout_marginBottom="200dp"
+        android:background="@drawable/rounded_button"
         android:text="4"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,11 +99,12 @@
 
     <Button
         android:id="@+id/btnCalc2"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="158dp"
         android:layout_marginEnd="158dp"
         android:layout_marginBottom="275dp"
+        android:background="@drawable/rounded_button"
         android:text="2"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,11 +112,12 @@
 
     <Button
         android:id="@+id/btnCalc6"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="233dp"
         android:layout_marginEnd="83dp"
         android:layout_marginBottom="200dp"
+        android:background="@drawable/rounded_button"
         android:text="6"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,11 +125,12 @@
 
     <Button
         android:id="@+id/btnCalcDelete"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="233dp"
         android:layout_marginEnd="83dp"
         android:layout_marginBottom="50dp"
+        android:background="@drawable/rounded_button"
         android:text="DEL"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,11 +138,12 @@
 
     <Button
         android:id="@+id/btnCalc8"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="158dp"
         android:layout_marginEnd="158dp"
         android:layout_marginBottom="125dp"
+        android:background="@drawable/rounded_button"
         android:text="8"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
@@ -171,11 +182,12 @@
 
     <Button
         android:id="@+id/btnCalc5"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="158dp"
         android:layout_marginEnd="158dp"
         android:layout_marginBottom="200dp"
+        android:background="@drawable/rounded_button"
         android:text="5"
         app:layout_constraintBottom_toTopOf="@+id/btnRecieve"
         app:layout_constraintEnd_toEndOf="parent"
