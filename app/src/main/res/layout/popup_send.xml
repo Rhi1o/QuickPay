@@ -39,6 +39,7 @@
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <RadioGroup
+        android:id="@+id/rdoGroupSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtSendAmount"
@@ -61,6 +62,25 @@
             android:text="Other user:" />
     </RadioGroup>
 
+    <Button
+        android:id="@+id/btnCancelSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rdoGroupSend"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:text="CANCEL" />
+
+    <Button
+        android:id="@+id/btnConfirmSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rdoGroupSend"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:text="CONFIRM" />
 
 
 </RelativeLayout>
