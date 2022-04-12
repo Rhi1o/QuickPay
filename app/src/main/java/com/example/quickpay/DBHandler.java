@@ -101,15 +101,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new user to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public boolean addNewUser(String userFName, String userLName, String userUsername,
+    public static boolean addUser(SQLiteDatabase db, String userFName, String userLName, String userUsername,
                               String userPassword, double balance, int account, int routing) {
-        // on below line we are creating a variable for
-        // our sqlite database and calling writable method
-        // as we are writing data in our database.
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // on below line we are creating a
-        // variable for content values.
+        // creating a variable for content values.
         ContentValues cv = new ContentValues();
 
         // on below line we are passing all values
@@ -137,15 +131,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new transaction to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public boolean addNewDraft(int userID, String type, String frequency, String otherParty,
+    public static boolean addDraft(SQLiteDatabase db, int userID, String type, String frequency, String otherParty,
                                double amount) {
-        // on below line we are creating a variable for
-        // our sqlite database and calling writable method
-        // as we are writing data in our database.
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // on below line we are creating a
-        // variable for content values.
+        // creating a variable for content values.
         ContentValues cv = new ContentValues();
 
         // on below line we are passing all values
@@ -169,18 +157,18 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End addNewTransaction
 
+    public SQLiteDatabase getDatabase() {
+        return this.getWritableDatabase();
+    }
+
     // this method is use to add new transaction to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public boolean addNewTransaction(int userID, String transactionType, String otherParty,
-                                     double transactionAmount, String transactionDate) {
-        // on below line we are creating a variable for
-        // our sqlite database and calling writable method
-        // as we are writing data in our database.
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // on below line we are creating a
-        // variable for content values.
+    public static boolean addTransaction(SQLiteDatabase db, int userID, String transactionType, String otherParty,
+                                     double transactionAmount) {
+        // creating a variable for content values.
         ContentValues cv = new ContentValues();
+
+        String transactionDate = "(SELECT DATETIME('now'))";
 
         // on below line we are passing all values
         // along with its key and value pair.
@@ -203,9 +191,8 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End addNewTransaction
 
-    public boolean editUser(int userID, String userFName, String userLName, String userUsername,
+    public static boolean editUser(SQLiteDatabase db, int userID, String userFName, String userLName, String userUsername,
                             String userPassword, double balance, int account, int routing) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 
@@ -228,24 +215,22 @@ public class DBHandler extends SQLiteOpenHelper {
     }// End editUser
 
     // Returns a string list of all transactions linked to the passed user.
-    public String[] getTransactions(int userID) {
+    public static String[] getTransactions(SQLiteDatabase db, int userID) {
         String[] transactions = new String[0];
 
         return transactions;
     }// End getTransactions
 
     // Returns a string list of all drafts linked to the passed user.
-    public String[] getDrafts(int userID) {
+    public static String[] getDrafts(SQLiteDatabase db, int userID) {
         String[] drafts = new String[0];
 
         return drafts;
     }// End getDrafts
 
     // Edits the draft based on the draft ID, must pass all values for draft, will edit all values.
-    public boolean editDraft(int draftID, String type, String frequency, double amount,
+    public static boolean editDraft(SQLiteDatabase db, int draftID, String type, String frequency, double amount,
                              String otherParty) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues cv = new ContentValues();
 
         cv.put(DRAFTS_TYPE_COL, type);
@@ -263,11 +248,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End editDraft
 
-    public boolean deleteDraft(int draftID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues cv = new ContentValues();
-
+    public boolean deleteDraft(SQLiteDatabase db, int draftID) {
         int delete = db.delete(DRAFTS_TABLE_NAME, DRAFTS_ID_COL + " = " + draftID,
                 null);
 
