@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         btnMenu = findViewById(R.id.btnMenu);
         btnReceive = findViewById(R.id.btnRecieve);
         btnSend = findViewById(R.id.btnSend);
