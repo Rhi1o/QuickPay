@@ -197,7 +197,7 @@
         android:id="@+id/txtTransactionAmt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="25dp"
         android:text="$ 0.00"
         android:textAlignment="center"
         android:textAllCaps="false"

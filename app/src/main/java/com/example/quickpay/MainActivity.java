@@ -1,5 +1,6 @@
 package com.example.quickpay;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,7 +18,10 @@ import com.example.quickpay.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    private SQLiteDatabase database;
+
+    //private ActivityMainBinding binding;
+    private int userID = -1;
     private DBHandler dbHandler;
     private Button btnMenu;
     private Button btnReceive;
@@ -61,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
         btnCalc8 = findViewById(R.id.btnCalc8);
         btnCalc9 = findViewById(R.id.btnCalc9);
 
-
         dbHandler = new DBHandler(MainActivity.this);
+
+        database = dbHandler.getDatabase();
 
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showReceivePopup(v);
             }
+
         });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
         final PopupWindow menuPopup = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
         menuPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
 
         ImageButton btnCloseMenu = (ImageButton) popupView.findViewById(R.id.btnCloseMenu);
@@ -279,8 +284,13 @@ public class MainActivity extends AppCompatActivity {
         final PopupWindow receivePopup = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
         receivePopup.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        TextView txtReceiveAmount = (TextView) popupView.findViewById(R.id.txtReceiveAmount);
+
+        String transactionAmt = txtTransactionAmt.getText().toString().substring(2);
+        transactionAmt = "Amount: $ " + transactionAmt;
+        txtReceiveAmount.setText(transactionAmt);
 
         ImageButton btnCloseReceiving = (ImageButton) popupView.findViewById(R.id.btnCloseReceiving);
 
@@ -289,6 +299,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 receivePopup.dismiss();
+            }
+        });
+
+        Button btnCancelReceiving = (Button) popupView.findViewById(R.id.btnCancelReceive);
+
+        // dismiss the popup window when the close button is pressed
+        btnCancelReceiving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                receivePopup.dismiss();
+            }
+        });
+
+        Button btnConfirmReceiving = (Button) popupView.findViewById(R.id.btnConfirmReceive);
+
+        // dismiss the popup window when the close button is pressed
+        btnConfirmReceiving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Send data
+                double amount = Double.parseDouble(txtTransactionAmt.getText().toString().substring(2));
+
+                String otherParty = "Bank";
+
+                DBHandler.addTransaction(database, userID,"Deposit",otherParty,amount);
             }
         });
     }
@@ -306,13 +341,28 @@ public class MainActivity extends AppCompatActivity {
         final PopupWindow sendPopup = new PopupWindow(popupView, width, height, focusable);
 
         // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
         sendPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        TextView txtSendAmount = (TextView) popupView.findViewById(R.id.txtSendAmount);
+
+        String transactionAmt = txtTransactionAmt.getText().toString().substring(2);
+        transactionAmt = "Amount: $ " + transactionAmt;
+        txtSendAmount.setText(transactionAmt);
 
         ImageButton btnCloseSending = (ImageButton) popupView.findViewById(R.id.btnCloseSending);
 
         // dismiss the popup window when the close button is pressed
         btnCloseSending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPopup.dismiss();
+            }
+        });
+
+        Button btnCancelSending = (Button) popupView.findViewById(R.id.btnCancelSend);
+
+        // dismiss the popup window when the close button is pressed
+        btnCancelSending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendPopup.dismiss();
