@@ -2,10 +2,13 @@ package com.example.quickpay;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import java.text.NumberFormat;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -65,7 +68,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + USERS_LNAME_COL + " TEXT,"
                 + USERS_USERNAME_COL + " TEXT,"
                 + USERS_PASSWORD_COL + " TEXT,"
-                + USERS_BALANCE_COL + " DECIMAL,"
+                + USERS_BALANCE_COL + " TEXT,"
                 + USERS_ACCOUNT_COL + " INT,"
                 + USERS_ROUTING_COL + " INT (9))";
 
@@ -101,8 +104,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new user to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public static boolean addUser(SQLiteDatabase db, String userFName, String userLName, String userUsername,
-                              String userPassword, double balance, int account, int routing) {
+    public static boolean addUser(SQLiteDatabase db, String userFName, String userLName,
+                                  String userUsername, String userPassword,
+                                  int account, int routing) {
         // creating a variable for content values.
         ContentValues cv = new ContentValues();
 
@@ -112,15 +116,13 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(USERS_LNAME_COL, userLName);
         cv.put(USERS_USERNAME_COL, userUsername);
         cv.put(USERS_PASSWORD_COL, userPassword);
-        cv.put(USERS_BALANCE_COL, balance);
+        cv.put(USERS_BALANCE_COL, "0.00");
         cv.put(USERS_ACCOUNT_COL, account);
         cv.put(USERS_ROUTING_COL, routing);
 
         // after adding all values we are passing
         // content values to our table.
         long insert = db.insert(USERS_TABLE_NAME, null, cv);
-
-        db.close();
 
         if (insert == -1) {
             return false;
@@ -131,8 +133,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new transaction to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public static boolean addDraft(SQLiteDatabase db, int userID, String type, String frequency, String otherParty,
-                               double amount) {
+    public static boolean addDraft(SQLiteDatabase db, int userID, String type, String frequency,
+                                   String otherParty, double amount) {
         // creating a variable for content values.
         ContentValues cv = new ContentValues();
 
@@ -148,7 +150,6 @@ public class DBHandler extends SQLiteOpenHelper {
         // content values to our table.
         long insert = db.insert(DRAFTS_TABLE_NAME, null, cv);
 
-        db.close();
 
         if (insert == -1) {
             return false;
@@ -163,8 +164,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new transaction to our sqlite database.
     // Returns true if successful insertion, false otherwise.
-    public static boolean addTransaction(SQLiteDatabase db, int userID, String transactionType, String otherParty,
-                                     double transactionAmount) {
+    public static boolean addTransaction(SQLiteDatabase db, int userID, String transactionType,
+                                         String otherParty, double transactionAmount) {
         // creating a variable for content values.
         ContentValues cv = new ContentValues();
 
@@ -182,17 +183,22 @@ public class DBHandler extends SQLiteOpenHelper {
         // content values to our table.
         long insert = db.insert(TRANSACTIONS_TABLE_NAME, null, cv);
 
-        db.close();
+        if (transactionType.equals("Withdrawal")) {
+            transactionAmount = transactionAmount * (-1);
+        }
 
-        if (insert == -1) {
+        boolean update = updateUserBalance(db,userID,transactionAmount);
+
+        if (insert == -1 || update) {
             return false;
         } else {
             return true;
         }
     }// End addNewTransaction
 
-    public static boolean editUser(SQLiteDatabase db, int userID, String userFName, String userLName, String userUsername,
-                            String userPassword, double balance, int account, int routing) {
+    public static boolean editUser(SQLiteDatabase db, int userID, String userFName,
+                                   String userLName, String userUsername, String userPassword,
+                                   double balance, int account, int routing) {
 
         ContentValues cv = new ContentValues();
 
@@ -214,6 +220,20 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End editUser
 
+    public static String getUserBalance(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_BALANCE_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String balance = cursor.getString(0);
+
+        return balance;
+    }
+
     // Returns a string list of all transactions linked to the passed user.
     public static String[] getTransactions(SQLiteDatabase db, int userID) {
         String[] transactions = new String[0];
@@ -229,8 +249,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }// End getDrafts
 
     // Edits the draft based on the draft ID, must pass all values for draft, will edit all values.
-    public static boolean editDraft(SQLiteDatabase db, int draftID, String type, String frequency, double amount,
-                             String otherParty) {
+    public static boolean editDraft(SQLiteDatabase db, int draftID, String type, String frequency,
+                                    double amount, String otherParty) {
         ContentValues cv = new ContentValues();
 
         cv.put(DRAFTS_TYPE_COL, type);
@@ -248,7 +268,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End editDraft
 
-    public boolean deleteDraft(SQLiteDatabase db, int draftID) {
+    public static boolean deleteDraft(SQLiteDatabase db, int draftID) {
         int delete = db.delete(DRAFTS_TABLE_NAME, DRAFTS_ID_COL + " = " + draftID,
                 null);
 
@@ -258,6 +278,25 @@ public class DBHandler extends SQLiteOpenHelper {
             return true;
         }
     }// End deleteDraft
+
+    private static boolean updateUserBalance(SQLiteDatabase db, int userID, double amount) {
+        double balance = Double.parseDouble(getUserBalance(db,userID));
+
+        balance += amount;
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(USERS_BALANCE_COL, balance);
+
+        int update = db.update(USERS_TABLE_NAME, cv, USERS_ID_COL + " = " + userID,
+                null);
+
+        if (update < 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }// End updateUserBalance
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
