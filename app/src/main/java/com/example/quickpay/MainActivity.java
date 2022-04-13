@@ -11,21 +11,26 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quickpay.databinding.ActivityMainBinding;
+
+import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
     private SQLiteDatabase database;
 
     //private ActivityMainBinding binding;
-    private int userID = -1;
+    private int userID = 1;
+    private String userBalance;
     private DBHandler dbHandler;
     private Button btnMenu;
     private Button btnReceive;
     private Button btnSend;
+    private TextView txtBalance;
     private TextView txtTransactionAmt;
     private Button btnCalcDelete;
     private Button btnCalcDecimal;
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+        txtBalance = findViewById(R.id.txtBalance);
 
         btnMenu = findViewById(R.id.btnMenu);
         btnReceive = findViewById(R.id.btnRecieve);
@@ -68,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
         dbHandler = new DBHandler(MainActivity.this);
 
         database = dbHandler.getDatabase();
+
+        //dbHandler.addUser(database, "test", "user", "test",
+        //        "asdf",  654321, 987654321);
+
+        setBalanceText();
 
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,76 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 editTransactionText(".");
             }
         });
-
-        //getActionBar().setHomeButtonEnabled(true);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        /*
-        // TESTING DATABASE
-        int counter = 0;
-
-        if (!dbHandler.addNewUser("a", "b", "f", "d", 1, 2, 3)) {counter++;}
-        if (!dbHandler.addNewUser("a", "b", "c", "d", 1, 2, 3)) {counter++;}
-        if (!dbHandler.addNewUser("a", "b", "c", "d", 1, 2, 3)) {counter++;}
-        if (!dbHandler.addNewUser("a", "b", "c", "d", 1, 2, 3)) {counter++;}
-
-        if (!dbHandler.editUser(1,"a", "b", "c", "d", 1, 2, 3)) {counter++;}
-        if (!dbHandler.editUser(2,"b", "c", "d", "e", 2, 3, 4)) {counter++;}
-        if (!dbHandler.editUser(3,"c", "d", "e", "f", 3, 4, 5)) {counter++;}
-        if (!dbHandler.editUser(4,"d", "e", "f", "g", 4, 5, 6)) {counter++;}
-        if (!dbHandler.editUser(5,"d", "e", "f", "g", 4, 5, 6)) {counter++;}//
-        if (!dbHandler.editUser(0,"d", "e", "f", "g", 4, 5, 6)) {counter++;}//
-
-        if (!dbHandler.addNewTransaction(1,"Withdrawal","a",1,"01/01/2000 01:01:00.001")) {counter++;}
-        if (!dbHandler.addNewTransaction(1,"Deposit","b",1,"01/01/2000 01:01:00.002")) {counter++;}
-        if (!dbHandler.addNewTransaction(1,"Withdrawal","c",1,"01/01/2000 01:01:00.003")) {counter++;}
-
-        if (!dbHandler.addNewDraft(1,"Withdrawal","Monthly","b",15.00)) {counter++;}
-        if (!dbHandler.addNewDraft(1,"Withdrawal","Monthly","b",15.00)) {counter++;}
-        if (!dbHandler.addNewDraft(1,"Deposit","Monthly","b",15.00)) {counter++;}
-
-        if (!dbHandler.editDraft(1,"withdrawal","Bi-weekly",15.00,"b")) {counter++;}
-        if (!dbHandler.editDraft(2,"dep","monthly",16.00,"c")) {counter++;}
-        if (!dbHandler.editDraft(3,"deposit","semianually",17.00,"d")) {counter++;}
-        if (!dbHandler.editDraft(4,"a","Bi-weekly",15.00,"b")) {counter++;}//
-
-        if (!dbHandler.addNewDraft(1,"Withdrawal","Monthly","b",15.00)) {counter++;}
-        if (!dbHandler.deleteDraft(4)) {counter++;}
-        if (!dbHandler.deleteDraft(4)) {counter++;}//
-
-        Toast.makeText(MainActivity.this, "Failed: " + counter + "/4", Toast.LENGTH_SHORT).show();
-        */
     }// End onCreate
-
-    private void editTransactionText(String add) {
-        StringBuilder temp = new StringBuilder(txtTransactionAmt.getText().toString());
-
-        if (temp.toString().equals("$ 0.00")) {
-            temp = temp.replace(0, temp.length(), "$ ");
-        }
-
-        if (add == "d") {
-            temp = temp.deleteCharAt(temp.length() - 1);
-            if (temp.length() <= 2) {
-                resetTransactionText();
-                return;
-            }
-        }
-        else if (temp.indexOf(".") != -1 && temp.length() - temp.indexOf(".") == 3) {
-            // Do nothing
-        }
-        else {
-            temp = temp.append(add);
-        }
-
-        txtTransactionAmt.setText(temp.toString());
-    }// End editText
-
-    private void resetTransactionText() {
-        String temp = "$ 0.00";
-
-        txtTransactionAmt.setText(temp);
-    }// End editText
 
     public void showMenuPopup(View view) {
         // inflate the layout of the popup window
@@ -288,8 +230,9 @@ public class MainActivity extends AppCompatActivity {
 
         TextView txtReceiveAmount = (TextView) popupView.findViewById(R.id.txtReceiveAmount);
 
-        String transactionAmt = txtTransactionAmt.getText().toString().substring(2);
-        transactionAmt = "Amount: $ " + transactionAmt;
+        Double amount = Double.parseDouble(txtTransactionAmt.getText().toString().substring(2));
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String transactionAmt = "Amount: $ " + formatter.format(amount).substring(1);
         txtReceiveAmount.setText(transactionAmt);
 
         ImageButton btnCloseReceiving = (ImageButton) popupView.findViewById(R.id.btnCloseReceiving);
@@ -324,6 +267,11 @@ public class MainActivity extends AppCompatActivity {
                 String otherParty = "Bank";
 
                 DBHandler.addTransaction(database, userID,"Deposit",otherParty,amount);
+
+                // Update the balance and transaction texts
+                setBalanceText();
+                resetTransactionText();
+                receivePopup.dismiss();
             }
         });
     }
@@ -345,8 +293,9 @@ public class MainActivity extends AppCompatActivity {
 
         TextView txtSendAmount = (TextView) popupView.findViewById(R.id.txtSendAmount);
 
-        String transactionAmt = txtTransactionAmt.getText().toString().substring(2);
-        transactionAmt = "Amount: $ " + transactionAmt;
+        Double amount = Double.parseDouble(txtTransactionAmt.getText().toString().substring(2));
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String transactionAmt = "Amount: $ " + formatter.format(amount).substring(1);
         txtSendAmount.setText(transactionAmt);
 
         ImageButton btnCloseSending = (ImageButton) popupView.findViewById(R.id.btnCloseSending);
@@ -368,5 +317,73 @@ public class MainActivity extends AppCompatActivity {
                 sendPopup.dismiss();
             }
         });
+
+        Button btnConfirmSending = (Button) popupView.findViewById(R.id.btnConfirmSend);
+
+        // dismiss the popup window when the close button is pressed
+        btnConfirmSending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Send data
+                double amount = Double.parseDouble(txtTransactionAmt.getText().toString().substring(2));
+
+                if (amount > Double.parseDouble(userBalance)) {
+                    Toast.makeText(MainActivity.this, "$ "+ amount + " is not available",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    String otherParty = "Bank";
+
+                    DBHandler.addTransaction(database, userID, "Withdrawal", otherParty, amount);
+                }
+                // Update the balance and transaction texts
+                setBalanceText();
+                resetTransactionText();
+                sendPopup.dismiss();
+
+            }
+        });
+    }// End showSendPopup
+
+    // Sets the balance text on screen to the users balance
+    private void setBalanceText() {
+        userBalance = dbHandler.getUserBalance(database, userID);
+
+        double balance = Double.parseDouble(userBalance);
+
+        // Format it to currency format to look fancy
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String balanceString = formatter.format(balance).substring(1);
+
+        txtBalance.setText("Available: $ " + balanceString);
     }
+
+    private void editTransactionText(String add) {
+        StringBuilder temp = new StringBuilder(txtTransactionAmt.getText().toString());
+
+        if (temp.toString().equals("$ 0.00")) {
+            temp = temp.replace(0, temp.length(), "$ ");
+        }
+
+        if (add == "d") {
+            temp = temp.deleteCharAt(temp.length() - 1);
+            if (temp.length() <= 2) {
+                resetTransactionText();
+                return;
+            }
+        }
+        else if (temp.indexOf(".") != -1 && temp.length() - temp.indexOf(".") == 3) {
+            // Do nothing
+        }
+        else {
+            temp = temp.append(add);
+        }
+
+        txtTransactionAmt.setText(temp.toString());
+    }// End editText
+
+    private void resetTransactionText() {
+        String temp = "$ 0.00";
+
+        txtTransactionAmt.setText(temp);
+    }// End editText
 }// End main
