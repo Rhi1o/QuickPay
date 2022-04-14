@@ -2,14 +2,17 @@ package com.example.quickpay;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -308,6 +311,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        EditText txtInputSendTo = (EditText) popupView.findViewById(R.id.txtInputSendTo);
+        RadioButton rdoSendToBank = (RadioButton) popupView.findViewById(R.id.rdoSendToBank);
+        RadioButton rdoSendToUser = (RadioButton) popupView.findViewById(R.id.rdoSendToUser);
+
+        rdoSendToBank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtInputSendTo.setEnabled(false);
+                Toast.makeText(MainActivity.this, "sending to bank", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rdoSendToUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtInputSendTo.setEnabled(true);
+                Toast.makeText(MainActivity.this, "sending to user", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         Button btnCancelSending = (Button) popupView.findViewById(R.id.btnCancelSend);
 
         // dismiss the popup window when the close button is pressed
@@ -331,7 +354,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "$ "+ amount + " is not available",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    String otherParty = "Bank";
+                    String otherParty = "Bank transfer";
+                    if (rdoSendToBank.isChecked()) {
+                        otherParty = txtInputSendTo.getText().toString();
+                    }
 
                     DBHandler.addTransaction(database, userID, "Withdrawal", otherParty, amount);
                 }

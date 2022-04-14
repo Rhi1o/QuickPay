@@ -52,21 +52,23 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:checked="true"
-            android:text="Bank Account" />
+            android:text="Bank Account"
+            android:onClick="onSendRadioButtonClicked" />
 
         <RadioButton
             android:id="@+id/rdoSendToUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:text="Other user:" />
+            android:text="Other user:"
+            android:onClick="onSendRadioButtonClicked" />
     </RadioGroup>
 
     <Button
         android:id="@+id/btnCancelSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rdoGroupSend"
+        android:layout_below="@+id/txtInputSendTo"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="10dp"
@@ -76,11 +78,25 @@
         android:id="@+id/btnConfirmSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rdoGroupSend"
+        android:layout_below="@+id/txtInputSendTo"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:text="CONFIRM" />
+
+    <EditText
+        android:id="@+id/txtInputSendTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rdoGroupSend"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="0dp"
+        android:ems="10"
+        android:hint="username"
+        android:inputType="textPersonName"
+        android:visibility="visible"
+        android:enabled="false"/>
 
 
 </RelativeLayout>
