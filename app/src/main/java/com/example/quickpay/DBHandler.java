@@ -220,6 +220,43 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }// End editUser
 
+    public static int verifyUser(SQLiteDatabase db, String username, String password) {
+        String query = "SELECT " + USERS_ID_COL + ", " + USERS_PASSWORD_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_USERNAME_COL + " = '" + username + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+        else
+            return -1;
+
+        int userID = cursor.getInt(0);
+        String userPassword = cursor.getString(1);
+
+        if (userPassword.equals(password)) {
+            return userID;
+        }
+
+        return -1;
+    }
+
+    public static int getUserID(SQLiteDatabase db, String username) {
+        String query = "SELECT " + USERS_ID_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_USERNAME_COL + " = '" + username + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+        else
+            return -1;
+
+        int userID = cursor.getInt(0);
+
+        return userID;
+    }
+
     public static String getUserBalance(SQLiteDatabase db, int userID) {
         String query = "SELECT " + USERS_BALANCE_COL + " FROM " +
                 USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;

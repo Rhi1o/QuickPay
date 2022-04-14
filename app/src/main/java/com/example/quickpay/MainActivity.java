@@ -24,12 +24,14 @@ import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
+    private DBHandler dbHandler;
     private SQLiteDatabase database;
 
     //private ActivityMainBinding binding;
     private int userID = 1;
     private String userBalance;
-    private DBHandler dbHandler;
+    private String userUsername = "testUsername";
+
     private Button btnMenu;
     private Button btnReceive;
     private Button btnSend;
@@ -78,8 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
         database = dbHandler.getDatabase();
 
-        //dbHandler.addUser(database, "test", "user", "test",
-        //        "asdf",  654321, 987654321);
+        /*
+        dbHandler.addUser(database, "test", "user", "test",
+                "asdf",  654321, 987654321);
+        dbHandler.addUser(database, "admin", "user", "admin",
+                "admin",  123456, 123456789);
+         */
 
         setBalanceText();
 
@@ -267,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                 //Send data
                 double amount = Double.parseDouble(txtTransactionAmt.getText().toString().substring(2));
 
-                String otherParty = "Bank";
+                String otherParty = "Bank transfer";
 
                 DBHandler.addTransaction(database, userID,"Deposit",otherParty,amount);
 
@@ -319,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 txtInputSendTo.setEnabled(false);
-                Toast.makeText(MainActivity.this, "sending to bank", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -327,7 +332,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 txtInputSendTo.setEnabled(true);
-                Toast.makeText(MainActivity.this, "sending to user", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -355,11 +359,24 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     String otherParty = "Bank transfer";
-                    if (rdoSendToBank.isChecked()) {
+                    int otherUserID = 0;
+
+                    if (rdoSendToUser.isChecked()) {
                         otherParty = txtInputSendTo.getText().toString();
+                        otherUserID = dbHandler.getUserID(database,otherParty);
                     }
 
-                    DBHandler.addTransaction(database, userID, "Withdrawal", otherParty, amount);
+                    if (otherUserID != -1) {
+                        dbHandler.addTransaction(database, userID, "Withdrawal",
+                                otherParty, amount);
+                        if (otherUserID != 0) {
+                            dbHandler.addTransaction(database, otherUserID, "Deposit",
+                                    userUsername, amount);
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "User does not exist",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
                 // Update the balance and transaction texts
                 setBalanceText();
