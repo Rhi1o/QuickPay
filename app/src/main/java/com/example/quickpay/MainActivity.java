@@ -1,5 +1,6 @@
 package com.example.quickpay;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase database;
 
     //private ActivityMainBinding binding;
-    private int userID = 1;
+    private int userID;
     private String userBalance;
     private String userUsername = "testUsername";
 
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
         dbHandler.addUser(database, "admin", "user", "admin",
                 "admin",  123456, 123456789);
          */
+
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("userID",-1);
 
         setBalanceText();
 
