@@ -1,5 +1,6 @@
 package com.example.quickpay;
 
+import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+
         txtBalance = findViewById(R.id.txtBalance);
 
         btnMenu = findViewById(R.id.btnMenu);

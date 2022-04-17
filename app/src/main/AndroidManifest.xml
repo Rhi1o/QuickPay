@@ -11,6 +11,7 @@
         android:theme="@style/Theme.QuickPay">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:icon="@drawable/ic_home_black_24dp"
             android:exported="true"
             android:label="@string/title_home">
