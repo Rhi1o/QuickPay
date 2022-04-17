@@ -119,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                 int routing = -1;
                 int account = -1;
                 try {
+                    // Check to see if user entered values for these two fields, if so assign them.
                     routing = Integer.parseInt(txtInputRegRouting.getText().toString());
                     account = Integer.parseInt(txtInputRegAccount.getText().toString());
                 } catch (Exception exception) {
@@ -130,14 +131,13 @@ public class LoginActivity extends AppCompatActivity {
                     // A field is left empty, display error and try again.
                     Toast.makeText(LoginActivity.this, "All fields must be populated!",
                             Toast.LENGTH_SHORT).show();
-                } else {
-                    // Add the user
-                    if (dbHandler.addUser(database, fName, lName, username, password, account, routing)) {
+                } else if (dbHandler.addUser(database, fName, lName, username, password, account,
+                            routing)) {
+                    // Add the user to the database.
                         registerPopup.dismiss();
-                    } else {
-                        Toast.makeText(LoginActivity.this,
-                                "Something went wrong, try again.", Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(LoginActivity.this,
+                            "Something went wrong, try again.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
