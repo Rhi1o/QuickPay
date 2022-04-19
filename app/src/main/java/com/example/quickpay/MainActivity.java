@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase database;
 
     //private ActivityMainBinding binding;
-    private int userID;
+    private int userID = -1;
     private String userBalance;
     private String userUsername = "testUsername";
 
@@ -90,8 +90,10 @@ public class MainActivity extends AppCompatActivity {
                 "admin",  123456, 123456789);
          */
 
-        Intent intent = getIntent();
-        userID = intent.getIntExtra("userID",-1);
+        if (userID == -1) {
+            Intent intent = getIntent();
+            userID = intent.getIntExtra("userID", -1);
+        }
 
         setBalanceText();
 
@@ -222,6 +224,16 @@ public class MainActivity extends AppCompatActivity {
         Button btnTransactionHistory = (Button) popupView.findViewById(R.id.btnTransactionHistory);
         Button btnAutomaticPayments = (Button) popupView.findViewById(R.id.btnAutomaticPayments);
         Button btnLogOut = (Button) popupView.findViewById(R.id.btnLogOut);
+
+        btnAccountInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                intent.putExtra("userID",userID);
+
+                startActivity(intent);
+            }
+        });
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
