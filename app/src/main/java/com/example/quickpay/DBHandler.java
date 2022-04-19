@@ -198,7 +198,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static boolean editUser(SQLiteDatabase db, int userID, String userFName,
                                    String userLName, String userUsername, String userPassword,
-                                   double balance, int account, int routing) {
+                                   int account, int routing) {
 
         ContentValues cv = new ContentValues();
 
@@ -206,7 +206,6 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(USERS_LNAME_COL, userLName);
         cv.put(USERS_USERNAME_COL, userUsername);
         cv.put(USERS_PASSWORD_COL, userPassword);
-        cv.put(USERS_BALANCE_COL, balance);
         cv.put(USERS_ACCOUNT_COL, account);
         cv.put(USERS_ROUTING_COL, routing);
 
@@ -269,7 +268,91 @@ public class DBHandler extends SQLiteOpenHelper {
         String balance = cursor.getString(0);
 
         return balance;
-    }
+    }// End getUserBalance
+
+    public static String getUserFName(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_FNAME_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String value = cursor.getString(0);
+
+        return value;
+    }// End getUserFName
+
+    public static String getUserLName(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_LNAME_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String value = cursor.getString(0);
+
+        return value;
+    }// End getUserLName
+
+    public static String getUserUsername(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_USERNAME_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String value = cursor.getString(0);
+
+        return value;
+    }// End getUserUsername
+
+    public static String getUserPassword(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_PASSWORD_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String value = cursor.getString(0);
+
+        return value;
+    }// End getUserPassword
+
+    public static String getUserAccount(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_ACCOUNT_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String value = cursor.getString(0);
+
+        return value;
+    }// End getUserAccount
+
+    public static String getUserRouting(SQLiteDatabase db, int userID) {
+        String query = "SELECT " + USERS_ROUTING_COL + " FROM " +
+                USERS_TABLE_NAME + " WHERE " + USERS_ID_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String value = cursor.getString(0);
+
+        return value;
+    }// End getUserRouting
 
     // Returns a string list of all transactions linked to the passed user.
     public static String[] getTransactions(SQLiteDatabase db, int userID) {
