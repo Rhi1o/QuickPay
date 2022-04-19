@@ -6,6 +6,7 @@
     android:background="#E1E1E1">
 
     <TextView
+        android:id="@+id/txtMenuTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -25,5 +26,53 @@
         android:layout_marginEnd="5dp"
         android:background="#00FFFFFF"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <Button
+        android:id="@+id/btnAccountInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMenuTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:background="#00FFFFFF"
+        android:text="Account information"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btnTransactionHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAccountInformation"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:background="#00FFFFFF"
+        android:text="Transaction history"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btnAutomaticPayments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnTransactionHistory"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:background="#00FFFFFF"
+        android:text="Automatic payments"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAutomaticPayments"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:background="#00FFFFFF"
+        android:text="Log out"
+        android:textColor="#000000" />
 
 </RelativeLayout>

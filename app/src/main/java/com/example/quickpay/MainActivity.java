@@ -218,6 +218,19 @@ public class MainActivity extends AppCompatActivity {
         menuPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
 
         ImageButton btnCloseMenu = (ImageButton) popupView.findViewById(R.id.btnCloseMenu);
+        Button btnAccountInformation = (Button) popupView.findViewById(R.id.btnAccountInformation);
+        Button btnTransactionHistory = (Button) popupView.findViewById(R.id.btnTransactionHistory);
+        Button btnAutomaticPayments = (Button) popupView.findViewById(R.id.btnAutomaticPayments);
+        Button btnLogOut = (Button) popupView.findViewById(R.id.btnLogOut);
+
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
+                startActivity(intent);
+            }
+        });
 
         // dismiss the popup window when the close button is pressed
         btnCloseMenu.setOnClickListener(new View.OnClickListener() {
