@@ -6,10 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
-import java.text.NumberFormat;
-
 public class DBHandler extends SQLiteOpenHelper {
 
     // creating a constant variables for the database.
@@ -233,6 +229,8 @@ public class DBHandler extends SQLiteOpenHelper {
         int userID = cursor.getInt(0);
         String userPassword = cursor.getString(1);
 
+        cursor.close();
+
         if (userPassword.equals(password)) {
             return userID;
         }
@@ -244,14 +242,16 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT " + USERS_ID_COL + " FROM " +
                 USERS_TABLE_NAME + " WHERE " + USERS_USERNAME_COL + " = '" + username + "'";
 
+        int userID = -1;
+
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor != null)
+        if (cursor != null) {
             cursor.moveToFirst();
-        else
-            return -1;
+            userID = cursor.getInt(0);
+        }
 
-        int userID = cursor.getInt(0);
+        cursor.close();
 
         return userID;
     }
@@ -267,6 +267,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String balance = cursor.getString(0);
 
+        cursor.close();
+
         return balance;
     }// End getUserBalance
 
@@ -280,6 +282,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         String value = cursor.getString(0);
+
+        cursor.close();
 
         return value;
     }// End getUserFName
@@ -295,6 +299,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String value = cursor.getString(0);
 
+        cursor.close();
+
         return value;
     }// End getUserLName
 
@@ -308,6 +314,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         String value = cursor.getString(0);
+
+        cursor.close();
 
         return value;
     }// End getUserUsername
@@ -323,6 +331,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String value = cursor.getString(0);
 
+        cursor.close();
+
         return value;
     }// End getUserPassword
 
@@ -337,6 +347,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String value = cursor.getString(0);
 
+        cursor.close();
+
         return value;
     }// End getUserAccount
 
@@ -350,6 +362,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         String value = cursor.getString(0);
+
+        cursor.close();
 
         return value;
     }// End getUserRouting
