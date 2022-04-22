@@ -42,6 +42,24 @@ public class HistoryActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        // Get the user ID from the previous activity
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("userID", -1);
 
+        ImageButton btnCloseHistory = findViewById(R.id.btnCloseHistory);
+
+        btnCloseHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMainActivity();
+            }
+        });
     }// End onCreate
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(HistoryActivity.this, MainActivity.class);
+        intent.putExtra("userID",userID);
+
+        startActivity(intent);
+    }// End goToMainActivity
 }// End class

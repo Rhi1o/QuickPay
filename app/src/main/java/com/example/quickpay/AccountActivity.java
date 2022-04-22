@@ -61,8 +61,9 @@ public class AccountActivity extends AppCompatActivity {
 
         database = dbHandler.getDatabase();
 
+        // Get the user ID from the previous activity
         Intent intent = getIntent();
-        userID = intent.getIntExtra("userID",-1);
+        userID = intent.getIntExtra("userID", -1);
 
         userFName = dbHandler.getUserFName(database,userID);
         userLName = dbHandler.getUserLName(database,userID);

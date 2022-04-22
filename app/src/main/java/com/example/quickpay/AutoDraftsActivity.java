@@ -42,6 +42,26 @@ public class AutoDraftsActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        // Get the user ID from the previous activity
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("userID", -1);
+
+        ImageButton btnCloseAutoDrafts = findViewById(R.id.btnCloseAutoDrafts);
+
+        btnCloseAutoDrafts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMainActivity();
+            }
+        });
+
 
     }// End onCreate
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(AutoDraftsActivity.this, MainActivity.class);
+        intent.putExtra("userID",userID);
+
+        startActivity(intent);
+    }// End goToMainActivity
 }// End class

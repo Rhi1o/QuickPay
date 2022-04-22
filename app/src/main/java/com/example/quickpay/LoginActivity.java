@@ -64,10 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (userID != -1) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("userID", userID);
-
-                    startActivity(intent);
+                    goToMainActivity();
                 } else {
                     txtPassword.setText("");
 
@@ -157,4 +154,11 @@ public class LoginActivity extends AppCompatActivity {
 
         return id;
     }// End attemptLogin
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("userID",userID);
+
+        startActivity(intent);
+    }// End goToMainActivity
 }// End class

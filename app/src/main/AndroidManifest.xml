@@ -41,6 +41,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".HistoryActivity"
+            android:screenOrientation="portrait"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:exported="true"
+            android:label="@string/title_home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AutoDraftsActivity"
+            android:screenOrientation="portrait"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:exported="true"
+            android:label="@string/title_home">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

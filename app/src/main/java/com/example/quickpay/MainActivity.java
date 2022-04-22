@@ -90,10 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 "admin",  123456, 123456789);
          */
 
-        if (userID == -1) {
-            Intent intent = getIntent();
-            userID = intent.getIntExtra("userID", -1);
-        }
+        // Get the user ID from the previous activity
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("userID", -1);
 
         setBalanceText();
 
@@ -228,19 +227,28 @@ public class MainActivity extends AppCompatActivity {
         btnAccountInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AccountActivity.class);
-                intent.putExtra("userID",userID);
+                goToAccountActivity();
+            }
+        });
 
-                startActivity(intent);
+        btnTransactionHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToHistoryActivity();
+            }
+        });
+
+        btnAutomaticPayments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToAutoDraftsActivity();
             }
         });
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-
-                startActivity(intent);
+                goToLoginActivity();
             }
         });
 
@@ -429,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
         String balanceString = formatter.format(balance).substring(1);
 
         txtBalance.setText("Available: $ " + balanceString);
-    }
+    }// End setBalanceText
 
     private void editTransactionText(String add) {
         StringBuilder temp = new StringBuilder(txtTransactionAmt.getText().toString());
@@ -460,4 +468,31 @@ public class MainActivity extends AppCompatActivity {
 
         txtTransactionAmt.setText(temp);
     }// End editText
+
+    private void goToHistoryActivity() {
+        Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+        intent.putExtra("userID",userID);
+
+        startActivity(intent);
+    }
+
+    private void goToLoginActivity() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+
+        startActivity(intent);
+    }// End goToLoginActivity
+
+    private void goToAutoDraftsActivity() {
+        Intent intent = new Intent(MainActivity.this, AutoDraftsActivity.class);
+        intent.putExtra("userID",userID);
+
+        startActivity(intent);
+    }// End goToAutoDraftsActivity()
+
+    private void goToAccountActivity() {
+        Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+        intent.putExtra("userID",userID);
+
+        startActivity(intent);
+    }// End goToAccountInformation
 }// End main
