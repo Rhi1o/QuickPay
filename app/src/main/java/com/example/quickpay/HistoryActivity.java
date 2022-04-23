@@ -5,7 +5,11 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -13,6 +17,10 @@ public class HistoryActivity extends AppCompatActivity {
     private SQLiteDatabase database;
 
     private int userID;
+
+    private ListView lstTransactions;
+    private ArrayList<String> items;
+    private HistoryListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +33,13 @@ public class HistoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userID = intent.getIntExtra("userID", -1);
 
+        lstTransactions = findViewById(R.id.lstTransactions);
         ImageButton btnCloseHistory = findViewById(R.id.btnCloseHistory);
+        items = new ArrayList<>();
+        items.add("hello world");
+        adapter = new HistoryListAdapter(getApplicationContext(), items);
+
+        lstTransactions.setAdapter(adapter);
 
         btnCloseHistory.setOnClickListener(new View.OnClickListener() {
             @Override

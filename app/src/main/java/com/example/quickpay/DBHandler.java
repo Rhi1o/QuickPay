@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     // creating a constant variables for the database.
@@ -369,15 +371,27 @@ public class DBHandler extends SQLiteOpenHelper {
     }// End getUserRouting
 
     // Returns a string list of all transactions linked to the passed user.
-    public static String[] getTransactions(SQLiteDatabase db, int userID) {
-        String[] transactions = new String[0];
+    public static ArrayList<String[]> getTransactions(SQLiteDatabase db, int userID) {
+        ArrayList<String[]> transactions = new ArrayList<>();
+
+        String query = "SELECT " + TRANSACTIONS_DATE_COL + ", " + TRANSACTIONS_OTHER_PARTY_COL + ", " + TRANSACTIONS_TYPE_COL + ", " + TRANSACTIONS_AMOUNT_COL + " FROM " +
+                TRANSACTIONS_TABLE_NAME + " WHERE " + TRANSACTIONS_USER_COL + " = " + userID;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        String date = cursor.getString(0);
+
+        cursor.close();
 
         return transactions;
     }// End getTransactions
 
     // Returns a string list of all drafts linked to the passed user.
-    public static String[] getDrafts(SQLiteDatabase db, int userID) {
-        String[] drafts = new String[0];
+    public static ArrayList<String[]> getDrafts(SQLiteDatabase db, int userID) {
+        ArrayList<String[]> drafts = new ArrayList<>();
 
         return drafts;
     }// End getDrafts
