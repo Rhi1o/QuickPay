@@ -33,12 +33,13 @@ public class HistoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userID = intent.getIntExtra("userID", -1);
 
+        dbHandler = new DBHandler(HistoryActivity.this);
+        database = dbHandler.getDatabase();
+
         lstTransactions = findViewById(R.id.lstTransactions);
         ImageButton btnCloseHistory = findViewById(R.id.btnCloseHistory);
-        items = new ArrayList<>();
-        items.add("hello world");
+        items = dbHandler.getTransactions(database, userID);
         adapter = new HistoryListAdapter(getApplicationContext(), items);
-
         lstTransactions.setAdapter(adapter);
 
         btnCloseHistory.setOnClickListener(new View.OnClickListener() {

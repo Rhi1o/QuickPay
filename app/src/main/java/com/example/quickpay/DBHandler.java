@@ -81,7 +81,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + TRANSACTIONS_TYPE_COL + " TEXT,"
                 + TRANSACTIONS_OTHER_PARTY_COL + " TEXT,"
                 + TRANSACTIONS_AMOUNT_COL + " DECIMAL,"
-                + TRANSACTIONS_DATE_COL + " TEXT)";
+                + TRANSACTIONS_DATE_COL + " DATETIME DEFAULT CURRENT_TIMESTAMP)";
 
         // execute above sql query
         db.execSQL(query);
@@ -167,7 +167,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // creating a variable for content values.
         ContentValues cv = new ContentValues();
 
-        String transactionDate = "(SELECT DATETIME('now'))";
+        String transactionDate = "";
 
         // on below line we are passing all values
         // along with its key and value pair.
@@ -175,7 +175,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cv.put(TRANSACTIONS_TYPE_COL, transactionType);
         cv.put(TRANSACTIONS_OTHER_PARTY_COL, otherParty);
         cv.put(TRANSACTIONS_AMOUNT_COL, transactionAmount);
-        cv.put(TRANSACTIONS_DATE_COL, transactionDate);
+        //cv.put(TRANSACTIONS_DATE_COL, transactionDate);
 
         // after adding all values we are passing
         // content values to our table.
@@ -222,22 +222,22 @@ public class DBHandler extends SQLiteOpenHelper {
                 USERS_TABLE_NAME + " WHERE " + USERS_USERNAME_COL + " = '" + username + "'";
 
         Cursor cursor = db.rawQuery(query, null);
+        String userPassword;
+        int userID = -1;
 
-        if (cursor != null)
+        if ((cursor != null) && (cursor.getCount() > 0)) {
             cursor.moveToFirst();
-        else
-            return -1;
 
-        int userID = cursor.getInt(0);
-        String userPassword = cursor.getString(1);
+            userPassword = cursor.getString(1);
 
-        cursor.close();
+            if (userPassword.equals(password)) {
+                userID = cursor.getInt(0);
+            }
 
-        if (userPassword.equals(password)) {
-            return userID;
+            cursor.close();
         }
 
-        return -1;
+        return userID;
     }
 
     public static int getUserID(SQLiteDatabase db, String username) {
@@ -371,18 +371,28 @@ public class DBHandler extends SQLiteOpenHelper {
     }// End getUserRouting
 
     // Returns a string list of all transactions linked to the passed user.
-    public static ArrayList<String[]> getTransactions(SQLiteDatabase db, int userID) {
-        ArrayList<String[]> transactions = new ArrayList<>();
+    public static ArrayList<String> getTransactions(SQLiteDatabase db, int userID) {
 
-        String query = "SELECT " + TRANSACTIONS_DATE_COL + ", " + TRANSACTIONS_OTHER_PARTY_COL + ", " + TRANSACTIONS_TYPE_COL + ", " + TRANSACTIONS_AMOUNT_COL + " FROM " +
-                TRANSACTIONS_TABLE_NAME + " WHERE " + TRANSACTIONS_USER_COL + " = " + userID;
+        ArrayList<String> transactions = new ArrayList<>();
+
+        String query = "SELECT " + TRANSACTIONS_DATE_COL + ", " + TRANSACTIONS_OTHER_PARTY_COL +
+                ", " + TRANSACTIONS_TYPE_COL + ", " + TRANSACTIONS_AMOUNT_COL + " FROM " +
+                TRANSACTIONS_TABLE_NAME + " WHERE " + TRANSACTIONS_USER_COL + " = " + userID +
+                " ORDER BY datetime(" + TRANSACTIONS_DATE_COL + ") DESC;";
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor != null)
-            cursor.moveToFirst();
+        if (cursor.moveToFirst()) {
+            do {
+                String transaction = "";
+                transaction += cursor.getString(cursor.getColumnIndexOrThrow(TRANSACTIONS_DATE_COL));
+                transaction += "," + cursor.getString(cursor.getColumnIndexOrThrow(TRANSACTIONS_OTHER_PARTY_COL));
+                transaction += "," + cursor.getString(cursor.getColumnIndexOrThrow(TRANSACTIONS_TYPE_COL));
+                transaction += "," + cursor.getString(cursor.getColumnIndexOrThrow(TRANSACTIONS_AMOUNT_COL));
 
-        String date = cursor.getString(0);
+                transactions.add(transaction);
+            } while (cursor.moveToNext());
+        }
 
         cursor.close();
 
@@ -454,5 +464,5 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DRAFTS_TABLE_NAME);
         onCreate(db);
     }// End onUpgrade
-}
+}// End Class
 

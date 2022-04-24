@@ -31,16 +31,25 @@ public class HistoryListAdapter extends ArrayAdapter<String> {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.transaction_list_row, null);
 
+            String[] temp = list.get(position).split(",");
+
             TextView date = convertView.findViewById(R.id.date);
-            date.setText("today");
+            date.setText(formatDate(temp[0]));
 
             TextView party = convertView.findViewById(R.id.party);
-            party.setText("other");
+            party.setText(temp[1]);
 
             TextView amount = convertView.findViewById(R.id.amount);
-            amount.setText("+$0.00");
-
+            if (temp[2].equals("Deposit")) {
+                amount.setText("+$ " + temp[3]);
+            } else {
+                amount.setText("-$ " + temp[3]);
+            }
         }
         return convertView;
-    }
-}
+    }// End getView
+
+    private String formatDate(String date) {
+        return date.substring(0,date.length() - 3);
+    }// End formatDate
+}// End class
