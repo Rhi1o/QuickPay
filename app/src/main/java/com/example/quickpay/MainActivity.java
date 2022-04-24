@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     //private ActivityMainBinding binding;
     private int userID = -1;
     private String userBalance;
-    private String userUsername = "testUsername";
+    private String userUsername;
 
     private Button btnMenu;
     private Button btnReceive;
@@ -77,16 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
         database = dbHandler.getDatabase();
 
-        /*
-        dbHandler.addUser(database, "test", "user", "test",
-                "asdf",  654321, 987654321);
-        dbHandler.addUser(database, "admin", "user", "admin",
-                "admin",  123456, 123456789);
-         */
-
         // Get the user ID from the previous activity
         Intent intent = getIntent();
         userID = intent.getIntExtra("userID", -1);
+        userUsername = dbHandler.getUserUsername(database,userID);
 
         setBalanceText();
 
@@ -308,7 +302,11 @@ public class MainActivity extends AppCompatActivity {
 
                 String otherParty = "Bank transfer";
 
-                DBHandler.addTransaction(database, userID,"Deposit",otherParty,amount);
+                if (amount != 0) {
+                    DBHandler.addTransaction(database, userID, "Deposit", otherParty, amount);
+                } else {
+                    makeToast("amount must be greater than $0.00");
+                }
 
                 // Update the balance and transaction texts
                 setBalanceText();
@@ -388,8 +386,9 @@ public class MainActivity extends AppCompatActivity {
                 double amount = Double.parseDouble(txtTransactionAmt.getText().toString().substring(2));
 
                 if (amount > Double.parseDouble(userBalance)) {
-                    Toast.makeText(MainActivity.this, "$ "+ amount + " is not available",
-                            Toast.LENGTH_SHORT).show();
+                    makeToast("$ "+ amount + " is not available");
+                } else if (amount == 0) {
+                    makeToast("amount must be greater than $0.00");
                 } else {
                     String otherParty = "Bank transfer";
                     int otherUserID = 0;
@@ -399,7 +398,9 @@ public class MainActivity extends AppCompatActivity {
                         otherUserID = dbHandler.getUserID(database,otherParty);
                     }
 
-                    if (otherUserID != -1) {
+                    if (otherUserID == userID) {
+                        makeToast("Lonely? Try sending to someone else...");
+                    } else if (otherUserID != -1) {
                         dbHandler.addTransaction(database, userID, "Withdrawal",
                                 otherParty, amount);
                         if (otherUserID != 0) {
@@ -407,15 +408,13 @@ public class MainActivity extends AppCompatActivity {
                                     userUsername, amount);
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "User does not exist",
-                                Toast.LENGTH_SHORT).show();
+                        makeToast("User does not exist");
                     }
                 }
                 // Update the balance and transaction texts
                 setBalanceText();
                 resetTransactionText();
                 sendPopup.dismiss();
-
             }
         });
     }// End showSendPopup
@@ -489,4 +488,9 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent);
     }// End goToAccountInformation
+
+    private void makeToast(String text) {
+        Toast.makeText(MainActivity.this, text,
+                Toast.LENGTH_SHORT).show();
+    }
 }// End main

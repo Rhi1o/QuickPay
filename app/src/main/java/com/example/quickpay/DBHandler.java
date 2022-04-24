@@ -248,7 +248,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor != null) {
+        if ((cursor != null) && (cursor.getCount() > 0)) {
             cursor.moveToFirst();
             userID = cursor.getInt(0);
         }
