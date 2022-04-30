@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 public class AutoDraftsActivity extends AppCompatActivity {
 
@@ -20,6 +22,13 @@ public class AutoDraftsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_autodrafts);
 
         getSupportActionBar().hide();
+
+        Spinner spinner = (Spinner) findViewById(R.id.dropdown_menu);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.autopay,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+
 
         // Get the user ID from the previous activity
         Intent intent = getIntent();

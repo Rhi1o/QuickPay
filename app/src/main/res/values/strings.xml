@@ -3,4 +3,11 @@
     <string name="title_home"></string>
     <string name="title_history">Transactions</string>
     <string name="title_account">Account</string>
+    <string-array name="autopay">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Bi-Weekly</item>
+        <item>Monthly</item>
+        <item>Annually</item>
+    </string-array>
 </resources>
